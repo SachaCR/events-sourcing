@@ -1,0 +1,30 @@
+{
+  "name": "events-sourcing",
+  "version": "0.0.1",
+  "description": "Event sourcing library. Just a workaround to play with event sourcing and learn more about it.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "SachaCR",
+  "license": "GPL-3.0-only",
+  "jest": {
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/tests"
+    ],
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov",
+      "text-summary"
+    ],
+    "verbose": false
+  },
+  "dependencies": {
+    "deepmerge": "^4.0.0",
+    "fast-json-patch": "^2.1.0"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
