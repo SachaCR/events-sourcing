@@ -1,14 +1,13 @@
-const jsonpatch = require('fast-json-patch')
-const merge = require('deepmerge')
+const jsonpatch = require('fast-json-patch');
+const merge = require('deepmerge');
 
-module.exports = function createEvent(name, state, patch) {
+module.exports = function createEvent(name, patch, state) {
+  const sequence = state.sequence + 1;
 
-  const sequence = state.sequence + 1
+  const newStateValues = merge(state.values, patch);
 
-  const newStateValues = merge(state.values, patch)
-
-  const apply = jsonpatch.compare(state.values, newStateValues)
-  const revert = jsonpatch.compare(newStateValues, state.values)
+  const apply = jsonpatch.compare(state.values, newStateValues);
+  const revert = jsonpatch.compare(newStateValues, state.values);
 
   return {
     sequence,
@@ -17,5 +16,5 @@ module.exports = function createEvent(name, state, patch) {
       apply,
       revert,
     },
-  }
-}
+  };
+};

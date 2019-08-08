@@ -1,16 +1,15 @@
-const createEvent = require('../createEvent')
+const createEvent = require('../createEvent');
 
 describe('createEvent()', () => {
   it('Should create an event that update firstName without deleting lastName', () => {
-
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
-    }
+    };
 
     const updates = { user: { firstName: 'tata' } };
 
-    const event = createEvent('user:updated', initialState, updates)
+    const event = createEvent('user:updated', updates, initialState);
 
     expect(event).toStrictEqual({
       sequence: 1,
@@ -20,30 +19,29 @@ describe('createEvent()', () => {
           {
             op: 'replace',
             path: '/user/firstName',
-            value: 'tata'
-          }
+            value: 'tata',
+          },
         ],
         revert: [
           {
             op: 'replace',
             path: '/user/firstName',
-            value: 'toto'
-          }
-        ]
-      }
-    })
-  })
+            value: 'toto',
+          },
+        ],
+      },
+    });
+  });
 
   it('Should create an event that update firstName with deleting lastName', () => {
-
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
-    }
+    };
 
     const updates = { user: { firstName: 'tata', lastName: undefined } };
 
-    const event = createEvent('user:updated', initialState, updates)
+    const event = createEvent('user:updated', updates, initialState);
 
     expect(event).toStrictEqual({
       sequence: 1,
@@ -71,21 +69,20 @@ describe('createEvent()', () => {
             path: '/user/firstName',
             value: 'toto',
           },
-        ]
-      }
-    })
-  })
+        ],
+      },
+    });
+  });
 
   it('Should create an event that update firstName with deleting lastName', () => {
-
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
-    }
+    };
 
     const updates = { user: { firstName: 'tata', lastName: null } };
 
-    const event = createEvent('user:updated', initialState, updates)
+    const event = createEvent('user:updated', updates, initialState);
 
     expect(event).toStrictEqual({
       sequence: 1,
@@ -95,7 +92,7 @@ describe('createEvent()', () => {
           {
             op: 'replace',
             path: '/user/lastName',
-            value: null
+            value: null,
           },
           {
             op: 'replace',
@@ -114,8 +111,8 @@ describe('createEvent()', () => {
             path: '/user/firstName',
             value: 'toto',
           },
-        ]
-      }
-    })
-  })
-})
+        ],
+      },
+    });
+  });
+});
