@@ -2,9 +2,21 @@
   "name": "events-sourcing",
   "version": "0.0.1",
   "description": "Event sourcing library. Just a workaround to play with event sourcing and learn more about it.",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
-    "test": "jest"
+    "build": "tsc",
+    "test": "jest",
+    "watch": "jest --watchAll",
+    "doc": "typedoc --options ./typedocconfig.ts",
+    "preversion": "npm test",
+    "version": "npm run build",
+    "postversion": "git push && git push --tags",
+    "all": "npm run test && npm run build && npm run doc",
+    "scenario": "rm results-scenario.json && ts-node ./scripts/singlePurchaseCase.ts >> results-scenario.json"
   },
   "author": "SachaCR",
   "license": "GPL-3.0-only",
@@ -13,6 +25,9 @@
       "<rootDir>/src",
       "<rootDir>/tests"
     ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
     "collectCoverage": true,
     "coverageReporters": [
       "lcov",
@@ -25,7 +40,14 @@
     "fast-json-patch": "^2.1.0"
   },
   "devDependencies": {
+    "@types/deepmerge": "^2.2.0",
+    "@types/fast-json-patch": "^1.1.5",
+    "@types/jest": "^24.0.17",
     "eslint": "^6.0.1",
-    "jest": "^24.8.0"
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "typedoc": "^0.15.0",
+    "typescript": "^3.5.3"
   }
 }

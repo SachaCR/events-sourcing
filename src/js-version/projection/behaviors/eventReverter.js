@@ -1,4 +1,4 @@
-const revertEvent = require('../revertEvent');
+const revertPatch = require('../../patch/revertPatch');
 
 function eventReverter(state) {
   return function revert(number = 1) {
@@ -6,8 +6,11 @@ function eventReverter(state) {
       return;
     }
 
-    const event = state.events.find((ev) => ev.sequence === state.sequence);
-    const newState = revertEvent(state, event);
+    const patch = state.patchs.find(
+      (patch) => patch.sequence === state.sequence,
+    );
+
+    const newState = revertPatch(state, patch);
     state.values = newState.values;
     state.sequence = newState.sequence;
 

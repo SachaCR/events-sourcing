@@ -5,31 +5,73 @@ Event sourcing library. Just a workaround to play with event sourcing and learn 
 - The default state has the sequence 0.
 - All events must have a consecutive sequence number. If not an error will be thrown : with `error.code === 'APPLY_EVENT_OUT_OF_SEQUENCE'`
 
-# Projections :
+# Projection(events, state, reducers) :
+
+- events: `optional` array of events. Default value: []
+- state: `optional` object. Default value: { sequence: 0, values:{} }
+- reducers: `optional` object. Default value: {}
 
 A projection is the results of all events that compose an entity. it expose utilities function to :
 
-- `addEvent()`: Will add a new event to the projection and refresh his state.
+- `addReducer(eventType, reducer)`: Will attach a reducer function to an event type.
+- `addEvent(eventType, payload)`: Will add a new event to the projection and refresh his state. Throw an error if no reducer is found.
 - `goTo(n)`: Go to the entity at the time of the event `n`.
 - `revert(n)`: Revert `n` events on the projection.
 - `apply(n)`: Apply `n` next events on the projection.
 - `sequence()`: Return the current sequence number of the projection. You can see that as a version number of the entity.
 - `values()`: Return the entity values.
 - `events()`: Return the events list of the projection.
+- `reducers()`: Return the reducers object map.
 
 ```js
 const evsc = require('events-sourcing');
 
-const events = [event1, event2, event3, event4];
+const events = [
+  {
+    // Event1
+    sequence: 1
+    type: 'add:money',
+    payload: { amount: 10 },
+  },
+];
 
-const projection = evsc.projection(events, state); // state is optional
-projection.sequence(); // => 4
-projection.values(); // => State of the projection after event4.
-projection.events(); // => [ event1, event2, event3, event4 ]
+const reducers = {
+  'add:money': (payload, state) => {
+    return { balance: state.balance + payload.amount };
+  },
+};
 
-projection.goTo(2);
-projection.sequence(); // => 2
-projection.values(); // => State of the projection after event sequence 2.
+const state = { balance: 0 };
+
+const projection = evsc.projection(events, state, reducers);
+projection.sequence(); // => 1
+projection.values(); // => { balance: 10 }
+projection.events(); // => [ Event1 ]
+```
+
+# Projection.addReducer(eventType, reducer) :
+
+This method will attach a reducer function to an event type.
+
+- EventType is a string
+- Reducer must be a pure function
+
+You can replace a reducer by a new version but in this case you will need to replay all events to get the state computed with your new reducer implementation
+
+```js
+const evsc = require('events-sourcing');
+
+const projection = evsc.projection([], { balance: 0 });
+
+projection.addReducer('add:money', (payload, state) => {
+  return {
+    balance: state.balance + payload.amount,
+  };
+});
+
+projection.addEvent('add:money', { amount: 10 });
+projection.values(); // { balance: 10 }
+projection.sequence(); // 1
 ```
 
 # Projection.addEvent() :
@@ -99,68 +141,6 @@ projection.sequence(); // => 2
 projection.values(); // => State of the projection after event sequence 2.
 ```
 
-# Creating events :
-
-```js
-const evsc = require('events-sourcing');
-
-// Default state if not provided
-const state = {
-  sequence: 0,
-  values: {},
-};
-
-const event = evsc.createEvent('user:created', { firstName: 'John' }, state);
-
-// event
-{
-  sequence: 1,
-  name: 'user:updated',
-  operations: {
-    // These are json-patch operations
-    apply: [
-      {
-        op: 'replace',
-        path: '/firstName',
-        value: 'John',
-      },
-    ],
-    revert: [
-      {
-        op: 'remove',
-        path: '/firstName',
-      },
-    ],
-  },
-};
-```
-
-# Applying events :
-
-```js
-const evsc = require('events-sourcing');
-
-const state = {
-  sequence: 1,
-  values: {
-    id: 2345,
-    email: 'john@test.com',
-  },
-};
-
-const event = evsc.createEvent('user:updated', { firstName: 'John' }, state);
-
-const newState = evsc.applyEvent(event, state);
-newState.values; // => { id: 2345, email: 'john@test.com', firstName: 'John' }
-newState.sequence; // => 2
-```
-
-# Reverting events :
-
-```js
-const previousState = evsc.revertEvent(event, state);
-```
-
 # Remove a key :
 
 To remove a key from a state set it to undefined.
@@ -183,9 +163,12 @@ projection.values; // => { user: { firstName: 'John', lastName: 'Snow' }  }
 
 # TODOS :
 
+- Rewrite in typescript [DONE]
+
 - Validate inputs
 - Complete tests on projections
-- Rewrite in typescript
 - Publish on NPM
 - Enforce sequence boundaries to avoid weird behaviors
 - Determine the behavior if we add an event on a projection that is currently not in his last sequence state.
+- Determine the fastest path in goTo method
+- Replay events on reducers updates

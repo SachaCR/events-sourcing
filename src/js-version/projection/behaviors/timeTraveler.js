@@ -1,5 +1,5 @@
-const applyEvent = require('../applyEvent');
-const revertEvent = require('../revertEvent');
+const applyPatch = require('../../patch/applyPatch');
+const revertPatch = require('../../patch/revertPatch');
 
 function timeTraveler(state) {
   return function timeTravelTo(targetSequence) {
@@ -10,19 +10,21 @@ function timeTraveler(state) {
     const targetIsForward = state.sequence < targetSequence;
 
     if (targetIsForward) {
-      const event = state.events.find(
-        (ev) => ev.sequence === state.sequence + 1,
+      const patch = state.patchs.find(
+        (patch) => patch.sequence === state.sequence + 1,
       );
 
-      const newState = applyEvent(state, event);
+      const newState = applyPatch(state, patch);
       state.values = newState.values;
       state.sequence = newState.sequence;
 
       timeTravelTo(targetSequence);
     } else {
-      const event = state.events.find((ev) => ev.sequence === state.sequence);
+      const patch = state.patchs.find(
+        (patch) => patch.sequence === state.sequence,
+      );
 
-      const newState = revertEvent(state, event);
+      const newState = revertPatch(state, patch);
       state.values = newState.values;
       state.sequence = newState.sequence;
 

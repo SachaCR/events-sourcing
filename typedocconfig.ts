@@ -1,0 +1,15 @@
+module.exports = {
+  src: ['./index.ts', './src'],
+  mode: 'file',
+  includeDeclarations: true,
+  tsconfig: 'tsconfig.json',
+  out: './typedocs',
+  excludePrivate: true,
+  excludeProtected: true,
+  excludeExternals: true,
+  readme: 'README.md',
+  name: 'events-sourcing',
+  ignoreCompilerErrors: false,
+  plugin: 'none',
+  listInvalidSymbolLinks: false,
+};

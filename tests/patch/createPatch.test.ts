@@ -1,7 +1,7 @@
-const createEvent = require('../createEvent');
+import { createPatch } from '../../src/patch/createPatch';
 
-describe('createEvent()', () => {
-  it('Should create an event that update firstName without deleting lastName', () => {
+describe('createPatch()', () => {
+  it('Should create a patch that update firstName without deleting lastName', () => {
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
@@ -9,11 +9,11 @@ describe('createEvent()', () => {
 
     const updates = { user: { firstName: 'tata' } };
 
-    const event = createEvent('user:updated', updates, initialState);
+    const patch = createPatch(1, 'user:updated', updates, initialState);
 
-    expect(event).toStrictEqual({
+    expect(patch).toStrictEqual({
       sequence: 1,
-      name: 'user:updated',
+      type: 'user:updated',
       operations: {
         apply: [
           {
@@ -33,7 +33,7 @@ describe('createEvent()', () => {
     });
   });
 
-  it('Should create an event that update firstName with deleting lastName', () => {
+  it('Should create an patch that update firstName with deleting lastName', () => {
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
@@ -41,11 +41,11 @@ describe('createEvent()', () => {
 
     const updates = { user: { firstName: 'tata', lastName: undefined } };
 
-    const event = createEvent('user:updated', updates, initialState);
+    const patch = createPatch(1, 'user:updated', updates, initialState);
 
-    expect(event).toStrictEqual({
+    expect(patch).toStrictEqual({
       sequence: 1,
-      name: 'user:updated',
+      type: 'user:updated',
       operations: {
         apply: [
           {
@@ -74,7 +74,7 @@ describe('createEvent()', () => {
     });
   });
 
-  it('Should create an event that update firstName with deleting lastName', () => {
+  it('Should create an patch that update firstName with deleting lastName', () => {
     const initialState = {
       sequence: 0,
       values: { user: { firstName: 'toto', lastName: 'titi' } },
@@ -82,11 +82,11 @@ describe('createEvent()', () => {
 
     const updates = { user: { firstName: 'tata', lastName: null } };
 
-    const event = createEvent('user:updated', updates, initialState);
+    const patch = createPatch(1, 'user:updated', updates, initialState);
 
-    expect(event).toStrictEqual({
+    expect(patch).toStrictEqual({
       sequence: 1,
-      name: 'user:updated',
+      type: 'user:updated',
       operations: {
         apply: [
           {

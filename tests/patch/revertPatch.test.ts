@@ -1,10 +1,11 @@
-const revertEvent = require('../revertEvent');
+import { revertPatch } from '../../src/patch/revertPatch';
+import { Patch } from '../../src/interfaces';
 
-describe('revertEvent()', () => {
-  it('Should use event.operations.revert and return the new state', () => {
-    const event = {
+describe('revertPatch()', () => {
+  it('Should use patch.operations.revert and return the new state', () => {
+    const patch: Patch = {
       sequence: 1,
-      name: 'user:updated',
+      type: 'user:updated',
       operations: {
         apply: [
           {
@@ -28,7 +29,7 @@ describe('revertEvent()', () => {
       values: { user: { firstName: 'tata', lastName: 'titi' } },
     };
 
-    const newState = revertEvent(initialState, event);
+    const newState = revertPatch(initialState, patch);
 
     expect(newState.sequence).toStrictEqual(0);
     expect(newState.values).toStrictEqual({
@@ -43,18 +44,23 @@ describe('revertEvent()', () => {
   });
 
   it('Should throw an error if sequence is not correct', () => {
-    const event = { sequence: 3 };
-    const initialState = { sequence: 2 };
+    const patch: Patch = {
+      sequence: 4,
+      type: 'toto',
+      operations: { apply: [], revert: [] },
+    };
+
+    const initialState = { sequence: 2, values: {} };
 
     let error;
 
     try {
-      revertEvent(initialState, event);
+      revertPatch(initialState, patch);
     } catch (err) {
       error = err;
     }
 
-    expect(error.message).toStrictEqual('Revert event is out of sequence');
-    expect(error.code).toStrictEqual('REVERT_EVENT_OUT_OF_SEQUENCE');
+    expect(error.message).toStrictEqual('Revert patch is out of sequence');
+    expect(error.code).toStrictEqual('REVERT_PATCH_OUT_OF_SEQUENCE');
   });
 });
