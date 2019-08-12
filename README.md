@@ -168,6 +168,5 @@ projection.values; // => { user: { firstName: 'John', lastName: 'Snow' }  }
 
 # TODOS :
 
-- Determine the behavior if we add an event on a projection that is currently not in his last sequence state.
 - Determine the fastest path in goTo method
 - Replay events on reducers updates

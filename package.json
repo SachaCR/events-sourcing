@@ -4,6 +4,13 @@
   "description": "Event sourcing library. Just a workaround to play with event sourcing and learn more about it.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "keywords": [
+    "event",
+    "sourcing",
+    "cqrs",
+    "projection",
+    "event sourcing"
+  ],
   "files": [
     "/dist"
   ],
@@ -43,6 +50,7 @@
     "@types/fast-json-patch": "^1.1.5",
     "@types/jest": "^24.0.17",
     "@types/node": "^12.7.1",
+    "benchmarkjs": "^0.1.8",
     "eslint": "^6.0.1",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
