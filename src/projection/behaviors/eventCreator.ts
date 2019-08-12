@@ -1,8 +1,8 @@
-import { State } from '../../interfaces';
+import { ProjectionInternalState } from '../../interfaces';
 import { applyPatch } from '../../patch/applyPatch';
 import { createPatch } from '../../patch/createPatch';
 
-export function eventCreator(state: State) {
+export function eventCreator(state: ProjectionInternalState) {
   return function create(eventType: string, payload: any): void {
     const reducer = state.reducers.get(eventType);
 

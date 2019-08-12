@@ -1,8 +1,8 @@
 import jsonpatch from 'fast-json-patch';
 
-import { BasicState, Patch } from '../interfaces';
+import { State, Patch } from '../interfaces';
 
-export function revertPatch(state: BasicState, patch: Patch): BasicState {
+export function revertPatch(state: State, patch: Patch): State {
   if (patch.sequence !== state.sequence) {
     const error = new Error('Revert patch is out of sequence');
     // @ts-ignore

@@ -2,11 +2,14 @@ import { createProjection } from '../../src/projection';
 
 describe('projection.addEvent(eventType, payload)', () => {
   it('Should add a reducer to the projection', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],

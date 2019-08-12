@@ -1,6 +1,6 @@
-import { State } from '../../interfaces';
+import { ProjectionInternalState } from '../../interfaces';
 
-export function eventReducer(state: State) {
+export function eventReducer(state: ProjectionInternalState) {
   return function addReducer(
     eventType: string,
     reducer: (payload: any, stateValues: any) => void,

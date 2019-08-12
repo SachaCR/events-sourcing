@@ -1,27 +1,12 @@
-Event sourcing library. Just a workaround to play with event sourcing and learn more about it.
+Event sourcing library.
 
-# Events sequences
-
-- The default state has the sequence 0.
-- All events must have a consecutive sequence number. If not an error will be thrown : with `error.code === 'APPLY_EVENT_OUT_OF_SEQUENCE'`
+This library allow you to create projection object that result from a list of events. To compute your events you need to attach reducer for each event types. Your reducer must be pure and return an object that reflect the update that you want to apply to your projection.
 
 # Projection(events, state, reducers) :
 
-- events: `optional` array of events. Default value: []
+- events: `optional` array of events. Default value: [].
 - state: `optional` object. Default value: { sequence: 0, values:{} }
-- reducers: `optional` object. Default value: {}
-
-A projection is the results of all events that compose an entity. it expose utilities function to :
-
-- `addReducer(eventType, reducer)`: Will attach a reducer function to an event type.
-- `addEvent(eventType, payload)`: Will add a new event to the projection and refresh his state. Throw an error if no reducer is found.
-- `goTo(n)`: Go to the entity at the time of the event `n`.
-- `revert(n)`: Revert `n` events on the projection.
-- `apply(n)`: Apply `n` next events on the projection.
-- `sequence()`: Return the current sequence number of the projection. You can see that as a version number of the entity.
-- `values()`: Return the entity values.
-- `events()`: Return the events list of the projection.
-- `reducers()`: Return the reducers object map.
+- reducers: `optional` array. Default value: []
 
 ```js
 const evsc = require('events-sourcing');
@@ -35,19 +20,32 @@ const events = [
   },
 ];
 
-const reducers = {
-  'add:money': (payload, state) => {
+const reducers = [{
+  event: 'add:money',
+  reducer: (payload, state) => {
     return { balance: state.balance + payload.amount };
   },
-};
+}];
 
-const state = { balance: 0 };
+const state = { sequence: 0, balance: 0 };
 
 const projection = evsc.projection(events, state, reducers);
 projection.sequence(); // => 1
 projection.values(); // => { balance: 10 }
 projection.events(); // => [ Event1 ]
 ```
+
+This will return a projection objcet which is the results of all events that compose an entity. A projection will expose these functions :
+
+- `addReducer(eventType, reducer)`: Will attach a reducer function to an event type.
+- `addEvent(eventType, payload)`: Will add a new event to the projection and refresh his state. Throw an error if no reducer is found.
+- `goTo(n)`: Go to the entity at the time of the event `n`.
+- `revert(n)`: Revert `n` events on the projection.
+- `apply(n)`: Apply `n` next events on the projection.
+- `sequence()`: Return the current sequence number of the projection. You can see that as a version number of the entity.
+- `values()`: Return the entity values.
+- `events()`: Return the events list of the projection.
+- `reducers()`: Return the reducers object map.
 
 # Projection.addReducer(eventType, reducer) :
 
@@ -140,6 +138,11 @@ projection.revert(2); // Will revert event 3 and 4
 projection.sequence(); // => 2
 projection.values(); // => State of the projection after event sequence 2.
 ```
+
+# Events sequences
+
+- The default state has the sequence 0.
+- All events must have a consecutive sequence number. If not an error will be thrown : with `error.code === 'APPLY_EVENT_OUT_OF_SEQUENCE'`
 
 # Remove a key :
 

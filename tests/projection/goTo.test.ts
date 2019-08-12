@@ -2,11 +2,14 @@ import { createProjection } from '../../src/projection';
 
 describe('projection.goTo(targetSequence)', () => {
   it('Should move the projection to the target sequence', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],

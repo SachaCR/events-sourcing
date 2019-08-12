@@ -1,11 +1,11 @@
 const applyPatch = require('../patch/applyPatch');
 const createPatch = require('../patch/createPatch');
 
-const eventApplier = require('../projection/behaviors/eventApplier');
-const eventCreator = require('../projection/behaviors/eventCreator');
-const eventReverter = require('../projection/behaviors/eventReverter');
-const timeTraveler = require('../projection/behaviors/timeTraveler');
-const eventReducer = require('../projection/behaviors/eventReducer');
+const eventApplier = require('./behaviors/eventApplier');
+const eventCreator = require('./behaviors/eventCreator');
+const eventReverter = require('./behaviors/eventReverter');
+const timeTraveler = require('./behaviors/timeTraveler');
+const eventReducer = require('./behaviors/eventReducer');
 
 function createProjection(
   events = [],

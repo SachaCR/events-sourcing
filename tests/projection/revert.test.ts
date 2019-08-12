@@ -2,11 +2,14 @@ import { createProjection } from '../../src/projection';
 
 describe('projection.revert(n)', () => {
   it('Should revert the last 2 events of the projection', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],
@@ -25,11 +28,14 @@ describe('projection.revert(n)', () => {
   });
 
   it('Should revert to sequence 0 if number is out of range', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],

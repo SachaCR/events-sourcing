@@ -1,9 +1,13 @@
 import { revertPatch } from '../../patch/revertPatch';
-import { State } from '../../interfaces';
+import { ProjectionInternalState } from '../../interfaces';
 
-export function eventReverter(state: State) {
+export function eventReverter(state: ProjectionInternalState) {
   return function revert(n: number = 1): void {
-    if (n === 0 || state.sequence === 0) {
+    if (
+      n === 0 ||
+      state.sequence === 0 ||
+      state.sequence === state.events[0].sequence - 1
+    ) {
       return;
     }
 

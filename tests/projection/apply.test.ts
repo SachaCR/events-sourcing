@@ -2,11 +2,14 @@ import { createProjection } from '../../src/projection';
 
 describe('projection.apply(n)', () => {
   it('Should apply the last event of the projection', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],
@@ -28,11 +31,14 @@ describe('projection.apply(n)', () => {
   });
 
   it('Should apply until the last event if number is out of range', () => {
-    const reducersMap = new Map();
-
-    reducersMap.set('update:firstname', (payload: any) => {
-      return { firstname: payload.value };
-    });
+    const reducersMap = [
+      {
+        event: 'update:firstname',
+        reducer: (payload: any) => {
+          return { firstname: payload.value };
+        },
+      },
+    ];
 
     const projection = createProjection(
       [],

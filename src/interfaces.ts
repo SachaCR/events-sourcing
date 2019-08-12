@@ -6,7 +6,7 @@ export type Event = {
   payload: any;
 };
 
-export type State = {
+export type ProjectionInternalState = {
   sequence: number;
   values: any;
   events: Array<Event>;
@@ -14,7 +14,7 @@ export type State = {
   patchs: Array<Patch>;
 };
 
-export type BasicState = {
+export type State = {
   sequence: number;
   values: any;
 };

@@ -1,8 +1,8 @@
-import { State } from '../../interfaces';
+import { ProjectionInternalState } from '../../interfaces';
 import { applyPatch } from '../../patch/applyPatch';
 import { revertPatch } from '../../patch/revertPatch';
 
-export function timeTraveler(state: State) {
+export function timeTraveler(state: ProjectionInternalState) {
   return function timeTravelTo(targetSequence: number): void {
     if (state.sequence === targetSequence) {
       return;

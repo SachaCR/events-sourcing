@@ -1,9 +1,12 @@
 import { applyPatch } from '../../patch/applyPatch';
-import { State } from '../../interfaces';
+import { ProjectionInternalState } from '../../interfaces';
 
-export function eventApplier(state: State) {
+export function eventApplier(state: ProjectionInternalState) {
   return function apply(n: number = 1): void {
-    if (n === 0 || state.sequence === state.patchs.length) {
+    if (
+      n === 0 ||
+      state.sequence === state.patchs[state.patchs.length - 1].sequence
+    ) {
       return;
     }
 

@@ -1,8 +1,8 @@
 import jsonpatch from 'fast-json-patch';
 
-import { BasicState, Patch } from '../interfaces';
+import { State, Patch } from '../interfaces';
 
-export function applyPatch(state: BasicState, patch: Patch): BasicState {
+export function applyPatch(state: State, patch: Patch): State {
   if (state.sequence + 1 !== patch.sequence) {
     const error = new Error('Apply patch is out of sequence');
     // @ts-ignore

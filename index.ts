@@ -1,3 +1,1 @@
-import { createProjection as projection } from './src/projection';
-
-export { projection };
+export { createProjection } from './src/projection';
