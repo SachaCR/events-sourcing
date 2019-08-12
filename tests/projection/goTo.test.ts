@@ -41,7 +41,7 @@ describe('projection.goTo(targetSequence)', () => {
     expect(projection.values()).toStrictEqual({ firstname: 'John' });
   });
 
-  it.only('Should stop at the max sequence if target is too high', () => {
+  it('Should stop at the max sequence if target is too high', () => {
     const reducersMap = [
       {
         event: 'update:firstname',
