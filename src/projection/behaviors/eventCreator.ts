@@ -1,6 +1,7 @@
 import { ProjectionInternalState } from '../../interfaces';
 import { applyPatch } from '../../patch/applyPatch';
 import { createPatch } from '../../patch/createPatch';
+import { timeTraveler } from '../behaviors/timeTraveler';
 
 export function eventCreator(state: ProjectionInternalState) {
   return function create(eventType: string, payload: any): void {
@@ -13,7 +14,12 @@ export function eventCreator(state: ProjectionInternalState) {
       throw error;
     }
 
-    const nextSequence = state.sequence + 1;
+    const lastSequence =
+      state.events.length > 0
+        ? state.events[state.events.length - 1].sequence
+        : 0;
+
+    const nextSequence = lastSequence + 1;
     state.events.push({
       sequence: nextSequence,
       type: eventType,
@@ -23,6 +29,10 @@ export function eventCreator(state: ProjectionInternalState) {
     const update = reducer(payload, state.values);
     const patch = createPatch(nextSequence, eventType, update, state);
     state.patchs.push(patch);
+
+    if (state.sequence !== lastSequence) {
+      timeTraveler(state)(lastSequence);
+    }
 
     const newState = applyPatch(state, patch);
     state.values = newState.values;

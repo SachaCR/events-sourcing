@@ -1,26 +1,18 @@
 import { revertPatch } from '../../patch/revertPatch';
 import { ProjectionInternalState } from '../../interfaces';
+import { findPatch } from '../findPatch';
 
 export function eventReverter(state: ProjectionInternalState) {
-  return function revert(n: number = 1): void {
+  return function revert(n: number): void {
     if (
-      n === 0 ||
+      n <= 0 ||
       state.sequence === 0 ||
       state.sequence === state.events[0].sequence - 1
     ) {
       return;
     }
 
-    const patch = state.patchs.find(
-      (patch) => patch.sequence === state.sequence,
-    );
-
-    if (!patch) {
-      const error = new Error('Patch not found');
-      // @ts-ignore
-      error.code = 'PATCH_NOT_FOUND';
-      throw error;
-    }
+    const patch = findPatch(state.patchs, state.sequence);
 
     const newState = revertPatch(state, patch);
     state.values = newState.values;

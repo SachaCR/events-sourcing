@@ -1,12 +1,14 @@
 Event sourcing library.
 
-This library allow you to create projection object that result from a list of events. To compute your events you need to attach reducer for each event types. Your reducer must be pure and return an object that reflect the update that you want to apply to your projection.
+This library allow you to create projection object that result from a list of events. You can also revert events and time travels at any point in time.
+
+To compute your events you need to attach reducer for each event types. Your reducer must be pure and return an object that reflect the update that you want to apply to your projection.
 
 # Projection(events, state, reducers) :
 
-- events: `optional` array of events. Default value: [].
-- state: `optional` object. Default value: { sequence: 0, values:{} }
-- reducers: `optional` array. Default value: []
+- events: `optional` array of events. Default value: `[]`.
+- state: `optional` object. Default value: `{ sequence: 0, values:{} }`
+- reducers: `optional` array. Default value: `[]`
 
 ```js
 const evsc = require('events-sourcing');
@@ -14,7 +16,7 @@ const evsc = require('events-sourcing');
 const events = [
   {
     // Event1
-    sequence: 1
+    sequence: 1 // Beware if you try to add a sequence number which is not the current state sequence + 1 this will throw an error.
     type: 'add:money',
     payload: { amount: 10 },
   },
@@ -42,8 +44,8 @@ This will return a projection objcet which is the results of all events that com
 - `goTo(n)`: Go to the entity at the time of the event `n`.
 - `revert(n)`: Revert `n` events on the projection.
 - `apply(n)`: Apply `n` next events on the projection.
-- `sequence()`: Return the current sequence number of the projection. You can see that as a version number of the entity.
-- `values()`: Return the entity values.
+- `sequence()`: Return the current sequence number of the projection.
+- `values()`: Return the current state values.
 - `events()`: Return the events list of the projection.
 - `reducers()`: Return the reducers object map.
 
@@ -166,12 +168,6 @@ projection.values; // => { user: { firstName: 'John', lastName: 'Snow' }  }
 
 # TODOS :
 
-- Rewrite in typescript [DONE]
-
-- Validate inputs
-- Complete tests on projections
-- Publish on NPM
-- Enforce sequence boundaries to avoid weird behaviors
 - Determine the behavior if we add an event on a projection that is currently not in his last sequence state.
 - Determine the fastest path in goTo method
 - Replay events on reducers updates

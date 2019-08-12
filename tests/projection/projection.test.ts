@@ -15,6 +15,51 @@ describe('createProjection()', () => {
     expect(projection.goTo).toBeDefined();
   });
 
+  describe('Given an initial state with sequence < 0', () => {
+    it('Should throw an error: STATE_SEQUENCE_LOWER_THAN_ZERO', () => {
+      const state = {
+        sequence: -1,
+        values: {},
+      };
+
+      let error;
+
+      try {
+        createProjection([], state, []);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toStrictEqual('State sequence must be >= to 0');
+      expect(error.code).toStrictEqual('STATE_SEQUENCE_LOWER_THAN_ZERO');
+    });
+  });
+
+  describe('Given events to create a projection and no reducers', () => {
+    it('Should throw an error: NO_REDUCER_FOUND', () => {
+      const events: Array<Event> = [
+        {
+          type: 'user:update:firstname',
+          payload: { value: 'Toto' },
+          sequence: 11,
+        },
+      ];
+
+      let error;
+
+      try {
+        createProjection(events);
+      } catch (err) {
+        error = err;
+      }
+
+      expect(error.message).toStrictEqual(
+        'No reducer for this event: user:update:firstname',
+      );
+      expect(error.code).toStrictEqual('NO_REDUCER_FOUND');
+    });
+  });
+
   describe('Given a list of events and a snapshot from sequence 10', () => {
     it('Should apply events on top of the snapshots and return a valid projection', () => {
       const state = {

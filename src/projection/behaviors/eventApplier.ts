@@ -1,25 +1,17 @@
 import { applyPatch } from '../../patch/applyPatch';
 import { ProjectionInternalState } from '../../interfaces';
+import { findPatch } from '../findPatch';
 
 export function eventApplier(state: ProjectionInternalState) {
-  return function apply(n: number = 1): void {
+  return function apply(n: number): void {
     if (
-      n === 0 ||
+      n <= 0 ||
       state.sequence === state.patchs[state.patchs.length - 1].sequence
     ) {
       return;
     }
 
-    const patch = state.patchs.find(
-      (patch) => patch.sequence === state.sequence + 1,
-    );
-
-    if (!patch) {
-      const error = new Error('Patch not found');
-      // @ts-ignore
-      error.code = 'PATCH_NOT_FOUND';
-      throw error;
-    }
+    const patch = findPatch(state.patchs, state.sequence + 1);
 
     const newState = applyPatch(state, patch);
     state.values = newState.values;

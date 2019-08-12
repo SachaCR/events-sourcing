@@ -33,6 +33,7 @@ export function createProjection(
     const error = new Error('State sequence must be >= to 0');
     // @ts-ignore
     error.code = 'STATE_SEQUENCE_LOWER_THAN_ZERO';
+    throw error;
   }
 
   const { sequence, values } = events.reduce(
@@ -40,7 +41,7 @@ export function createProjection(
       const reducer = reducers.get(event.type);
 
       if (!reducer) {
-        const error = new Error('No reducer for this event');
+        const error = new Error(`No reducer for this event: ${event.type}`);
         // @ts-ignore
         error.code = 'NO_REDUCER_FOUND';
         throw error;
