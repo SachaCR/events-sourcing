@@ -63,3 +63,5 @@ typings/
 typedocs
 
 .DS_Store
+
+dist
