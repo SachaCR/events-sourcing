@@ -13,7 +13,7 @@ export function eventApplier(state: ProjectionInternalState) {
         return;
       }
 
-      const patch = findPatch(state.patchs, state.sequence + 1);
+      const patch = findPatch(state, state.sequence + 1);
       const newState = applyPatch(state, patch);
       state.values = newState.values;
       state.sequence = newState.sequence;

@@ -1,10 +1,13 @@
-import { Patch } from '../interfaces';
+import { Patch, ProjectionInternalState } from '../interfaces';
 
-export function findPatch(patchs: Array<Patch>, sequence: number): Patch {
-  const patch = patchs.find((patch) => patch.sequence === sequence);
+export function findPatch(
+  state: ProjectionInternalState,
+  sequence: number,
+): Patch {
+  const patch = state.patchs[sequence - state.startSequence - 1];
 
   if (!patch) {
-    const error = new Error('Patch not found');
+    const error = new Error(`Patch not found: sequence: ${sequence - 1}`);
     // @ts-ignore
     error.code = 'PATCH_NOT_FOUND';
     throw error;

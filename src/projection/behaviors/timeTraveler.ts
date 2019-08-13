@@ -14,7 +14,7 @@ export function timeTraveler(state: ProjectionInternalState) {
         Math.min(lastSequence, targetSequence) - state.sequence;
 
       for (nbEventToApply; nbEventToApply > 0; nbEventToApply--) {
-        const patch = findPatch(state.patchs, state.sequence + 1);
+        const patch = findPatch(state, state.sequence + 1);
         const newState = applyPatch(state, patch);
         state.values = newState.values;
         state.sequence = newState.sequence;
@@ -25,7 +25,7 @@ export function timeTraveler(state: ProjectionInternalState) {
       let nbEventToRevert = state.sequence - Math.max(0, targetSequence);
 
       for (nbEventToRevert; nbEventToRevert > 0; nbEventToRevert--) {
-        const patch = findPatch(state.patchs, state.sequence);
+        const patch = findPatch(state, state.sequence);
         const newState = revertPatch(state, patch);
         state.values = newState.values;
         state.sequence = newState.sequence;

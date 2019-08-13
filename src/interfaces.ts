@@ -7,6 +7,7 @@ export type Event = {
 };
 
 export type ProjectionInternalState = {
+  startSequence: number;
   sequence: number;
   values: any;
   events: Array<Event>;

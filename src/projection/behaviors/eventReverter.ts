@@ -19,7 +19,7 @@ export function eventReverter(state: ProjectionInternalState) {
         return;
       }
 
-      const patch = findPatch(state.patchs, state.sequence);
+      const patch = findPatch(state, state.sequence);
       const newState = revertPatch(state, patch);
       state.values = newState.values;
       state.sequence = newState.sequence;
