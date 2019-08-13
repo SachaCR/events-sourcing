@@ -37,7 +37,7 @@ projection.values(); // => { balance: 10 }
 projection.events(); // => [ Event1 ]
 ```
 
-This will return a projection objcet which is the results of all events that compose an entity. A projection will expose these functions :
+This will return a projection object which is the results of all events that compose an entity. A projection will expose these functions :
 
 - `addReducer(eventType, reducer)`: Will attach a reducer function to an event type.
 - `addEvent(eventType, payload)`: Will add a new event to the projection and refresh his state. Throw an error if no reducer is found.
@@ -74,9 +74,11 @@ projection.values(); // { balance: 10 }
 projection.sequence(); // 1
 ```
 
-# Projection.addEvent() :
+# Projection.addEvent(eventType, payload) :
 
-This method will create an event push it in the projection events array and apply it to the projection
+This method will create an event push it in the projection events array and apply it to the projection.
+
+- Warning: You must have registered a reducer for that kind of event. Otherwise an error will be throw.
 
 ```js
 const evsc = require('events-sourcing');

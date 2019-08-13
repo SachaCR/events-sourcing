@@ -26,6 +26,14 @@
   },
   "author": "SachaCR",
   "license": "GPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SachaCR/events-sourcing"
+  },
+  "bugs": {
+    "url": "https://github.com/SachaCR/events-sourcing/issues"
+  },
+  "homepage": "https://github.com/SachaCR/events-sourcing#readme",
   "jest": {
     "roots": [
       "<rootDir>/src",
