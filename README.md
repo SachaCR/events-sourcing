@@ -13,6 +13,8 @@ To compute your events you need to attach reducer for each event types. Your red
 ```js
 const evsc = require('events-sourcing');
 
+const state = { sequence: 0, balance: 0 };
+
 const events = [
   {
     // Event1
@@ -28,8 +30,6 @@ const reducers = [{
     return { balance: state.balance + payload.amount };
   },
 }];
-
-const state = { sequence: 0, balance: 0 };
 
 const projection = evsc.projection(events, state, reducers);
 projection.sequence(); // => 1
@@ -150,12 +150,18 @@ projection.values(); // => State of the projection after event sequence 2.
 
 # Remove a key :
 
-To remove a key from a state set it to undefined.
+To remove a key from a state make you reducer return this key undefined.
 
 ```js
-projection.values; // => { firstName: 'John', lastName: 'Snow' }
-projection.addEvent('user:updated', { firstName: undefined });
-projection.values; // => { lastName: 'Snow' }
+projection.values(); // => { firstName: 'John', lastName: 'Snow' }
+
+projection.addReducer('user:remove:firstname', () => {
+  return {
+    firstname: undefined,
+  };
+});
+projection.addEvent('user:remove:firstname', {});
+projection.values(); // => { lastName: 'Snow' }
 ```
 
 # Nested objects :
@@ -163,12 +169,7 @@ projection.values; // => { lastName: 'Snow' }
 `evsc` support nested objects. It use `deepmerge` for that.
 
 ```js
-projection.values; // => { user : { firstName: 'John' } }
+projection.values(); // => { user : { firstName: 'John' } }
 projection.addEvent('user:updated', { user: { lastName: 'Snow' } });
-projection.values; // => { user: { firstName: 'John', lastName: 'Snow' }  }
+projection.values(); // => { user: { firstName: 'John', lastName: 'Snow' }  }
 ```
-
-# TODOS :
-
-- Determine the fastest path in goTo method
-- Replay events on reducers updates
