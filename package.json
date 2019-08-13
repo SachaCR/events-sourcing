@@ -1,6 +1,6 @@
 {
   "name": "events-sourcing",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Event sourcing library. Just a workaround to play with event sourcing and learn more about it.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
