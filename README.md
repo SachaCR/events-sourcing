@@ -4,7 +4,7 @@ This library allow you to create projection object that result from a list of ev
 
 To compute your events you need to attach reducer for each event types. Your reducer must be pure and return an object that reflect the update that you want to apply to your projection.
 
-# Projection(events, state, reducers) :
+# CreateProjection(events, state, reducers) :
 
 - events: `optional` array of events. Default value: `[]`.
 - state: `optional` object. Default value: `{ sequence: 0, values:{} }`
@@ -31,7 +31,7 @@ const reducers = [{
   },
 }];
 
-const projection = evsc.projection(events, state, reducers);
+const projection = evsc.createProjection(events, state, reducers);
 projection.sequence(); // => 1
 projection.values(); // => { balance: 10 }
 projection.events(); // => [ Event1 ]
@@ -61,7 +61,7 @@ You can replace a reducer by a new version but in this case you will need to rep
 ```js
 const evsc = require('events-sourcing');
 
-const projection = evsc.projection([], { balance: 0 });
+const projection = evsc.createProjection([], { balance: 0 });
 
 projection.addReducer('add:money', (payload, state) => {
   return {
@@ -85,7 +85,7 @@ const evsc = require('events-sourcing');
 
 const events = [event1, event2, event3, event4];
 
-const projection = evsc.projection(events, state); // state is optional
+const projection = evsc.createProjection(events, state); // state is optional
 projection.sequence(); // => 4
 projection.values(); // => State of the projection after event4.
 projection.events(); // => [ event1, event2, event3, event4 ]
@@ -104,7 +104,7 @@ This method will revert or apply events until matching the targetSequence
 const evsc = require('events-sourcing');
 
 const events = [event1, event2, event3, event4];
-const projection = evsc.projection(events, state);
+const projection = evsc.createProjection(events, state);
 
 projection.goTo(2);
 projection.sequence(); // => 2
@@ -119,7 +119,7 @@ This method will apply `n` events from the projection
 const evsc = require('events-sourcing');
 
 const events = [event1, event2, event3, event4];
-const projection = evsc.projection(events, state);
+const projection = evsc.createProjection(events, state);
 
 projection.goTo(2);
 projection.sequence(); // 2
@@ -136,7 +136,7 @@ This method will revert `n` events from the projection
 const evsc = require('events-sourcing');
 
 const events = [event1, event2, event3, event4];
-const projection = evsc.projection(events, state);
+const projection = evsc.createProjection(events, state);
 
 projection.revert(2); // Will revert event 3 and 4
 projection.sequence(); // => 2
