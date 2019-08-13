@@ -3,21 +3,26 @@ import { ProjectionInternalState } from '../../interfaces';
 import { findPatch } from '../findPatch';
 
 export function eventReverter(state: ProjectionInternalState) {
-  return function revert(n: number): void {
-    if (
-      n <= 0 ||
-      state.sequence === 0 ||
-      state.sequence === state.events[0].sequence - 1
-    ) {
+  return function revert(nbEventToRevert: number): void {
+    if (nbEventToRevert <= 0) {
       return;
     }
 
-    const patch = findPatch(state.patchs, state.sequence);
+    const minSequence = state.patchs[0].sequence - 1; // To get the original state sequence
+    const targetSequence = Math.max(
+      minSequence,
+      state.sequence - nbEventToRevert,
+    );
 
-    const newState = revertPatch(state, patch);
-    state.values = newState.values;
-    state.sequence = newState.sequence;
+    for (nbEventToRevert; nbEventToRevert > 0; nbEventToRevert--) {
+      if (state.sequence === targetSequence) {
+        return;
+      }
 
-    revert(n - 1);
+      const patch = findPatch(state, state.sequence);
+      const newState = revertPatch(state, patch);
+      state.values = newState.values;
+      state.sequence = newState.sequence;
+    }
   };
 }

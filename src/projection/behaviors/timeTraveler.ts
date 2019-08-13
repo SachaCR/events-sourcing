@@ -7,32 +7,31 @@ export function timeTraveler(state: ProjectionInternalState) {
   return function timeTravelTo(targetSequence: number): void {
     const lastSequence = state.patchs[state.patchs.length - 1].sequence;
 
-    if (state.sequence === targetSequence) {
-      return;
-    }
-
     const targetIsForward = state.sequence < targetSequence;
 
     if (targetIsForward) {
-      if (state.sequence === lastSequence) {
-        return;
+      let nbEventToApply =
+        Math.min(lastSequence, targetSequence) - state.sequence;
+
+      for (nbEventToApply; nbEventToApply > 0; nbEventToApply--) {
+        const patch = findPatch(state, state.sequence + 1);
+        const newState = applyPatch(state, patch);
+        state.values = newState.values;
+        state.sequence = newState.sequence;
       }
 
-      const patch = findPatch(state.patchs, state.sequence + 1);
-      const newState = applyPatch(state, patch);
-      state.values = newState.values;
-      state.sequence = newState.sequence;
+      return;
     } else {
-      if (state.sequence === 0) {
-        return;
+      let nbEventToRevert = state.sequence - Math.max(0, targetSequence);
+
+      for (nbEventToRevert; nbEventToRevert > 0; nbEventToRevert--) {
+        const patch = findPatch(state, state.sequence);
+        const newState = revertPatch(state, patch);
+        state.values = newState.values;
+        state.sequence = newState.sequence;
       }
 
-      const patch = findPatch(state.patchs, state.sequence);
-      const newState = revertPatch(state, patch);
-      state.values = newState.values;
-      state.sequence = newState.sequence;
+      return;
     }
-
-    timeTravelTo(targetSequence);
   };
 }

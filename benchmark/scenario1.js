@@ -1,6 +1,6 @@
 const evsc = require('../dist');
 
-const numberOfEvents = 10000; // Max call stack reach at 6596 events
+const numberOfEvents = 10000;
 
 const reducersMap = [
   {

@@ -36,6 +36,8 @@ export function createProjection(
     throw error;
   }
 
+  const startSequence = originalState.sequence;
+
   const { sequence, values } = events.reduce(
     (state: State, event: Event): State => {
       const reducer = reducers.get(event.type);
@@ -56,6 +58,7 @@ export function createProjection(
   );
 
   const newState: ProjectionInternalState = {
+    startSequence,
     reducers,
     sequence,
     values,

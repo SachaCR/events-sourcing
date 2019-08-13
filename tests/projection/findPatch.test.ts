@@ -7,7 +7,19 @@ describe('findPatch()', () => {
 
       const patch = findPatch(
         // @ts-ignore
-        [{ sequence: 1 }, { sequence: 2 }, { sequence: 3 }, { sequence: 4 }],
+        {
+          startSequence: 0,
+          patchs: [
+            // @ts-ignore
+            { sequence: 1 },
+            // @ts-ignore
+            { sequence: 2 },
+            // @ts-ignore
+            { sequence: 3 },
+            // @ts-ignore
+            { sequence: 4 },
+          ],
+        },
         patchSequence,
       );
 
@@ -23,14 +35,26 @@ describe('findPatch()', () => {
       try {
         const patch = findPatch(
           // @ts-ignore
-          [{ sequence: 1 }, { sequence: 2 }, { sequence: 3 }, { sequence: 4 }],
+          {
+            startSequence: 0,
+            patchs: [
+              // @ts-ignore
+              { sequence: 1 },
+              // @ts-ignore
+              { sequence: 2 },
+              // @ts-ignore
+              { sequence: 3 },
+              // @ts-ignore
+              { sequence: 4 },
+            ],
+          },
           patchSequence,
         );
       } catch (err) {
         error = err;
       }
 
-      expect(error.message).toStrictEqual('Patch not found');
+      expect(error.message).toStrictEqual('Patch not found: sequence: 4');
       expect(error.code).toStrictEqual('PATCH_NOT_FOUND');
     });
   });
