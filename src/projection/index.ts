@@ -67,10 +67,10 @@ export function createProjection(
   };
 
   return {
-    sequence: () => newState.sequence,
-    values: () => newState.values,
-    events: () => newState.events,
-    reducers: () => newState.reducers,
+    sequence: (): number => newState.sequence,
+    values: (): any => newState.values,
+    events: (): Array<Event> => newState.events,
+    reducers: (): Map<string, any> => newState.reducers,
     addReducer: eventReducer(newState),
     addEvent: eventCreator(newState),
     revert: eventReverter(newState),

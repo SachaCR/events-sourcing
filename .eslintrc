@@ -1,17 +1,21 @@
 {
-  "parser": "espree",
+  "parser": "@typescript-eslint/parser",
+  "extends": [
+    "plugin:@typescript-eslint/recommended" // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+  ],
   "env": {
     "es6": true,
     "node": true,
     "jest": true
   },
   "parserOptions": {
-    "ecmaVersion": 2017,
+    "ecmaVersion": 2018,
     "sourceType": "module"
   },
   "plugins": [],
   "rules": {
     "array-bracket-spacing": [2, "never"],
+    "@typescript-eslint/ban-ts-ignore": 0,
     "block-scoped-var": 2,
     "brace-style": [2, "1tbs"],
     "camelcase": 0,
@@ -29,12 +33,16 @@
     "no-trailing-spaces": 2,
     "no-unused-vars": 1,
     "no-use-before-define": [2, "nofunc"],
+    "@typescript-eslint/no-explicit-any": 0,
     "quotes": [2, "single", "avoid-escape"],
-    "semi": [2, "never"],
-    "keyword-spacing": [2, {
-      "before": true,
-      "after": true
-    }],
+    "semi": [2, "always"],
+    "keyword-spacing": [
+      2,
+      {
+        "before": true,
+        "after": true
+      }
+    ],
     "space-unary-ops": 2
   }
 }

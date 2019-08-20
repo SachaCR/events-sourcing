@@ -1,12 +1,14 @@
 const evsc = require('../dist');
 
-const numberOfEvents = 10000;
+const numberOfEvents = 100000;
 
 const reducersMap = [
   {
     event: 'count',
     reducer: (payload, state) => {
-      return { count: state.count + payload.value };
+      return {
+        count: state.count + payload.value,
+      };
     },
   },
 ];
