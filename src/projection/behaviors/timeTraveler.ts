@@ -6,6 +6,23 @@ import { findPatch } from '../findPatch';
 export function timeTraveler(state: ProjectionInternalState) {
   return function timeTravelTo(targetSequence: number): void {
     const lastSequence = state.patchs[state.patchs.length - 1].sequence;
+    const startSequence = state.startState.sequence;
+
+    const isShorterToStartFromTheFirstState =
+      Math.abs(targetSequence - state.startState.sequence) <
+      Math.abs(targetSequence - state.sequence);
+
+    const isShorterToStartFromTheLastState =
+      Math.abs(targetSequence - state.endState.sequence) <
+      Math.abs(targetSequence - state.sequence);
+
+    if (isShorterToStartFromTheFirstState) {
+      state.values = state.startState.values;
+      state.sequence = state.startState.sequence;
+    } else if (isShorterToStartFromTheLastState) {
+      state.values = state.endState.values;
+      state.sequence = state.endState.sequence;
+    }
 
     const targetIsForward = state.sequence < targetSequence;
 

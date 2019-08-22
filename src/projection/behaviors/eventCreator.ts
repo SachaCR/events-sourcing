@@ -2,6 +2,7 @@ import { ProjectionInternalState } from '../../interfaces';
 import { applyPatch } from '../../patch/applyPatch';
 import { createPatch } from '../../patch/createPatch';
 import { timeTraveler } from '../behaviors/timeTraveler';
+import jsonpatch from 'fast-json-patch';
 
 export function eventCreator(state: ProjectionInternalState) {
   return function create(eventType: string, payload: any): void {
@@ -37,5 +38,10 @@ export function eventCreator(state: ProjectionInternalState) {
     const newState = applyPatch(state, patch);
     state.values = newState.values;
     state.sequence = newState.sequence;
+
+    state.endState = {
+      values: jsonpatch.deepClone(newState.values),
+      sequence: newState.sequence,
+    };
   };
 }

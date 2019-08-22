@@ -4,7 +4,7 @@ export function findPatch(
   state: ProjectionInternalState,
   sequence: number,
 ): Patch {
-  const patch = state.patchs[sequence - state.startSequence - 1];
+  const patch = state.patchs[sequence - state.startState.sequence - 1];
 
   if (!patch) {
     const error = new Error(`Patch not found: sequence: ${sequence - 1}`);

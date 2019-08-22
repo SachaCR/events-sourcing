@@ -1,3 +1,5 @@
+import jsonpatch from 'fast-json-patch';
+
 import {
   ProjectionInternalState,
   Event,
@@ -36,7 +38,7 @@ export function createProjection(
     throw error;
   }
 
-  const startSequence = originalState.sequence;
+  const startState: State = jsonpatch.deepClone(originalState);
 
   const { sequence, values } = events.reduce(
     (state: State, event: Event): State => {
@@ -57,8 +59,14 @@ export function createProjection(
     originalState,
   );
 
+  const endState = {
+    values: jsonpatch.deepClone(values),
+    sequence,
+  };
+
   const newState: ProjectionInternalState = {
-    startSequence,
+    startState,
+    endState,
     reducers,
     sequence,
     values,

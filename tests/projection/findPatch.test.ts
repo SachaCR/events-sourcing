@@ -8,7 +8,7 @@ describe('findPatch()', () => {
       const patch = findPatch(
         // @ts-ignore
         {
-          startSequence: 0,
+          startState: { sequence: 0, values: {} },
           patchs: [
             // @ts-ignore
             { sequence: 1 },
@@ -33,10 +33,10 @@ describe('findPatch()', () => {
       let error;
 
       try {
-        const patch = findPatch(
+        findPatch(
           // @ts-ignore
           {
-            startSequence: 0,
+            startState: { sequence: 0, values: {} },
             patchs: [
               // @ts-ignore
               { sequence: 1 },

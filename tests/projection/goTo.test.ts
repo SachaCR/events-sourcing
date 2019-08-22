@@ -5,7 +5,7 @@ describe('projection.goTo(targetSequence)', () => {
     const reducersMap = [
       {
         event: 'update:firstname',
-        reducer: (payload: any) => {
+        reducer: (payload: any): any => {
           return { firstname: payload.value };
         },
       },
@@ -45,7 +45,7 @@ describe('projection.goTo(targetSequence)', () => {
     const reducersMap = [
       {
         event: 'update:firstname',
-        reducer: (payload: any) => {
+        reducer: (payload: any): any => {
           return { firstname: payload.value };
         },
       },
@@ -77,7 +77,7 @@ describe('projection.goTo(targetSequence)', () => {
     const reducersMap = [
       {
         event: 'update:firstname',
-        reducer: (payload: any) => {
+        reducer: (payload: any): any => {
           return { firstname: payload.value };
         },
       },
