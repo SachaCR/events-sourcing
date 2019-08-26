@@ -4,6 +4,8 @@ import { findPatch } from '../findPatch';
 
 export function eventReverter(state: ProjectionInternalState) {
   return function revert(nbEventToRevert: number): void {
+    nbEventToRevert = Math.round(nbEventToRevert);
+
     if (nbEventToRevert <= 0) {
       return;
     }

@@ -4,6 +4,8 @@ import { findPatch } from '../findPatch';
 
 export function eventApplier(state: ProjectionInternalState) {
   return function apply(nbEventToApply: number): void {
+    nbEventToApply = Math.round(nbEventToApply);
+
     const lastSequence = state.patchs[state.patchs.length - 1].sequence;
 
     for (nbEventToApply; nbEventToApply > 0; nbEventToApply--) {

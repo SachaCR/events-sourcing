@@ -5,8 +5,9 @@ import { findPatch } from '../findPatch';
 
 export function timeTraveler(state: ProjectionInternalState) {
   return function timeTravelTo(targetSequence: number): void {
+    targetSequence = Math.round(targetSequence);
+
     const lastSequence = state.patchs[state.patchs.length - 1].sequence;
-    const startSequence = state.startState.sequence;
 
     const isShorterToStartFromTheFirstState =
       Math.abs(targetSequence - state.startState.sequence) <
